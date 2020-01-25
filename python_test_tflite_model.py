@@ -5,7 +5,7 @@ import time
 import cv2
 import time
 import numpy as np
-
+from scipy.spatial import distance as dist
 import keras
 from keras.models import load_model
 import tensorflow as tf
@@ -14,16 +14,37 @@ import tensorflow as tf
 print(tf.__version__)
 print(keras.__version__)
 
+def eye_aspect_ratio(eye):
+    # distancia euclidiana entre pares horizontales (x,y)
+    A = dist.euclidean( eye[1],  eye[5] )
+    B = dist.euclidean( eye[2],  eye[4] )
+
+    # distancia euclidiana entre pares verticales (x,y)
+    C = dist.euclidean( eye[0],  eye[3] )
+
+    # calcula la relacion de aspecto del ojo
+    ear = (A + B) / (2.0 * C)
+    
+    return ear
+    
+def eye_ratio(shape):
+    leftEye = shape[0:6]
+    rightEye = shape[6:12]
+    
+    leftEAR = eye_aspect_ratio(leftEye)
+    rightEAR = eye_aspect_ratio(rightEye)
+
+    # promedio de la relacion de aspecto de los ojos
+    ear = (leftEAR + rightEAR) / 2.0
+
+    return ear, leftEye, rightEye   
+
 #parametros de la imagen
 IMG_WIDTH = 96# tamaño de a imagen de entrada de la CNN
 IMG_HEIGHT = 96
 IMG_CHANNEL = 1# imagen en escala de grises
 #N_LANDMARK = 68# numero de marcas faciales
 N_LANDMARK = 12# numero de marcas faciales
-
-#parametros de normalizacion
-MEAN = 38.47239423802548# valor medio de la normalizacion de las marcas faciales
-RANGE = 96.0#rango de la normalizacion de las marcas faciales
 
 # argumentos
 ap = argparse.ArgumentParser()
@@ -57,32 +78,58 @@ while True:
         w = rects[0][2]
         h = rects[0][3]
         
-        #preparacion de la imagen de entrada: color, tamaño y normalizacion
+        #preparacion de la imagen de entrada al modelo: color, tamaño y normalizacion
         grayImg = gray[y:(y+h), x:(x+w)]#extrae rectangulo del rostro detectado en escala de grises
         rezImg = cv2.resize( grayImg, ( IMG_WIDTH, IMG_HEIGHT ) )# escalado de la imagen
         rshImg = rezImg.reshape(1, IMG_WIDTH, IMG_HEIGHT, IMG_CHANNEL)#reordenamiento de la imagen de acuerdo a la entrada requerida por la CNN
-        rshImg = rshImg/255.0#normalizacion de la imagen, entre (0,1). De acuerdo al entrenamiento
-
+        
         # inferencia en el modelo
         start = time.time()    
         res=model.predict(rshImg)# ejecucion de la inferencia
-        print("tiempo de la inferencia: {}".format(time.time() - start))    
+        print("tiempo de la inferencia: {:.4f}".format(time.time() - start))    
         
-        #preparacion del resultado para el despliegue
-        marks=res.reshape( 1, N_LANDMARK, 2 )
-        marks = ( marks * RANGE ) + MEAN #desnormalizacion de la inferencia       
+        #preparacion del resultado para el despliegue sobre la imagen
+        marks=res.reshape( 1, N_LANDMARK, 2 )   
         
-        #despliegue del resultado
+        #despliegue del resultado: contorno de los ojos
+        mark_x=[]
+        mark_y=[]
+        for i in range(N_LANDMARK):#dibuja la inferencia sobre la imagen, escalado (tamaño de la inferencia->tamaño de la deteccion)
+           mark_x.append( int( marks[0, i, 0]*grayImg.shape[0]/IMG_WIDTH ) )
+           mark_y.append( int( marks[0, i, 1]*grayImg.shape[1]/IMG_HEIGHT ) )
+           
+        pts=[]
+        for i in range( len(mark_x) ):
+            pts.append( (mark_x[i], mark_y[i]) )
+            
+        ear, leftEye, rightEye = eye_ratio(pts)
+        
+        leftEye=np.array(leftEye)
+        rightEye=np.array(rightEye)
+        
+        leftEyeHull = cv2.convexHull( leftEye )
+        rightEyeHull = cv2.convexHull( rightEye )
+        
+        cv2.drawContours( grayImg, [leftEyeHull], -1, (255, 0, 0), 1 )
+        cv2.drawContours( grayImg, [rightEyeHull], -1, (255, 0, 0), 1 )
+            
+        #despliegue del resultado: marcas de los ojos 
         for i in range(N_LANDMARK):#dibuja la inferencia sobre la imagen, escalado (tamaño de la inferencia->tamaño de la deteccion)
             cv2.circle( grayImg, (  int( marks[0,i,0]*grayImg.shape[0]/IMG_WIDTH ), 
                                                 int( marks[0,i,1]*grayImg.shape[1]/IMG_HEIGHT )  ), 
                                                 2, (255, 0, 0), -1 )
-
-        for i in range(h):# copia el resultado sobre el frame de salida
+                                                
+        # copia de los resultados sobre el frame de salida
+        for i in range(h):
             for j in range(w):
-               gray[i,j]= grayImg[i,j]
+                gray[i,j]= grayImg[i,j]
                 
-        cv2.rectangle(gray, (x, y), (x+w, y+h), (0, 255, 0), 2)              
+        #rectangulo del rostro detectado con haarcascade
+        cv2.rectangle(gray, (x, y), (x+w, y+h), (0, 255, 0), 2)       
+
+        #valor de la relacion de aspecto   
+        cv2.putText(gray, "rao: {:.2f}".format(ear), ( int(gray.shape[0]-10), 50  ), cv2.FONT_HERSHEY_SIMPLEX,
+                    0.5, (255, 0, 0), thickness=2)     
         
     # despliegue de la imagen con el resultado
     cv2.imshow("Frame", gray)
