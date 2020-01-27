@@ -5,6 +5,8 @@
   1.3. Entrenamiento: creacion de la CNN, compilacion y entrenamiento->data_training.ipynb<br/>
   1.4. Despliegue del modelo: pruebas del modelo->data_inference.ipynb<br/>
   1.5. Transformacion del modelo de H5 a Tensorflow Lite->keras_to_tflite_model.ipynb<br/><br/>
-2. Despliegue del modelo TF Lite<br/>
+2. Despliegue del modelo TF Lite<br/><br/>
   2.1 Despliegue del modelo en PC con python->python_test_tflite_model.py<br/>
+  ![alt test](Screenshot_Landmark.png)<br/>
   2.2 Despliegue del modelo en APP android<br/>
+  ![alt test](Screenshot_Inference_android.jpg)<br/>
