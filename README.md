@@ -7,11 +7,11 @@ Step 2: this [notebook](https://github.com/jacr2006/drowsiness-detection/blob/ma
 
 Step 3: this [notebook](https://github.com/jacr2006/drowsiness-detection/blob/master/Notebooks/data_training.ipynb) normalizes the images, trains a CNN using Keras, and saves a TensorFlow model.
 
-Step 4: this [notebook](https://github.com/jacr2006/drowsiness-detection/blob/master/Notebooks/data_inference.ipynb) tests regression from an image.
+Step 4: this [notebook](https://github.com/jacr2006/drowsiness-detection/blob/master/Notebooks/data_inference.ipynb) tests regression model from an image.
 
-Step 5: this Python [script](https://github.com/jacr2006/drowsiness-detection/blob/master/Test/python_test_tflite_model.py) tests the model on PC.
+Step 5: this Python [script](https://github.com/jacr2006/drowsiness-detection/blob/master/Test/python_test_tflite_model.py) tests the model on PC with Python.
 ![alt test](Screenshot_Landmark.png)<br/><br/>
 
-Step 6: this [notebook](https://github.com/jacr2006/drowsiness-detection/blob/master/Notebooks/keras_to_tflite_model.ipynb) transforms H5 TensorFow model to TensorFlow Lite to deploy in Android app.
+Step 6: this [notebook](https://github.com/jacr2006/drowsiness-detection/blob/master/Notebooks/keras_to_tflite_model.ipynb) transforms H5 TensorFow model to TensorFlow Lite, this model is deployed on Android app.
 ![alt test](Screenshot_Inference_android.jpg)<br/>
 
