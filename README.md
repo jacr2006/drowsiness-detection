@@ -1,12 +1,17 @@
-# Android TF Litemodel Drowsiness
-1. Creacion de un modelo en TF Lite para deteccion de marcas faciales, usando el dataset (Helen)[https://ibug.doc.ic.ac.uk/resources/300-W/]<br/>
-  1.1. Visualizacion de los datos->data_visualization.ipynb<br/>
-  1.2. Procesamiento de los datos: escalado y aumento->data_processing.ipynb<br/>
-  1.3. Entrenamiento: creacion de la CNN, compilacion y entrenamiento->data_training.ipynb<br/>
-  1.4. Despliegue del modelo: pruebas del modelo->data_inference.ipynb<br/>
-  1.5. Transformacion del modelo de H5 a Tensorflow Lite->keras_to_tflite_model.ipynb<br/>
-2. Despliegue del modelo TF Lite<br/>
-  2.1 Despliegue del modelo en PC con python->python_test_tflite_model.py<br/>
-  ![alt test](Screenshot_Landmark.png)<br/><br/>
-  2.2 Despliegue del modelo en APP android<br/>
-  ![alt test](Screenshot_Inference_android.jpg)<br/>
+# Drowsiness detection using landamrk face
+this repositorie shows a regression for detect landmark face using a Convolution Neural Network. Helen dataset is used for train a CNN. Opencv camera library is used for face detection. Model is deployed in python and Android app.
+
+Step 1: this [notebook](https://github.com/jacr2006/drowsiness-detection/blob/master/Notebooks/data_visualization.ipynb) plots some images and landmark face.
+
+Step 2: this [notebook](https://github.com/jacr2006/drowsiness-detection/blob/master/Notebooks/data_processing.ipynb) scales the images (and landmarks) and converts to gray scale.
+
+Step 3: this [notebook](https://github.com/jacr2006/drowsiness-detection/blob/master/Notebooks/data_training.ipynb) normalizes the images, trains a CNN using Keras, and saves a TensorFlow model.
+
+Step 4: this [notebook](https://github.com/jacr2006/drowsiness-detection/blob/master/Notebooks/data_inference.ipynb) tests regression from an image.
+
+Step 5: this Python [script](https://github.com/jacr2006/drowsiness-detection/blob/master/Test/python_test_tflite_model.py) tests the model on PC.
+![alt test](Screenshot_Landmark.png)<br/><br/>
+
+Step 6: this [notebook](https://github.com/jacr2006/drowsiness-detection/blob/master/Notebooks/keras_to_tflite_model.ipynb) transforms H5 TensorFow model to TensorFlow Lite to deploy in Android app.
+![alt test](Screenshot_Inference_android.jpg)<br/>
+
