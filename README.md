@@ -1,5 +1,5 @@
 # Drowsiness detection using landamrk face
-this repositorie shows a regression for detect landmark face using a Convolution Neural Network. Helen dataset is used for train a CNN. HoG model is used for face detection. Model is deployed in python and Android app.
+this repositorie shows a regression for detect landmark face using a Convolution Neural Network. Helen dataset is used for train a CNN. HoG model is used for face detection. Model is deployed on PC with Python and on Android app.
 
 Step 1: this [notebook](https://github.com/jacr2006/drowsiness-detection/blob/master/Notebooks/data_visualization.ipynb) plots some images and landmark face.
 
