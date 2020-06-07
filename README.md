@@ -7,7 +7,7 @@ Step 2: this [notebook](https://github.com/jacr2006/drowsiness-detection/blob/ma
 
 Step 3: this [notebook](https://github.com/jacr2006/drowsiness-detection/blob/master/Notebooks/data_training.ipynb) normalizes the images, trains a CNN using Keras, and saves a TensorFlow model.
 
-Step 4: this [notebook](https://github.com/jacr2006/drowsiness-detection/blob/master/Notebooks/data_inference.ipynb) tests regression model. Input to model comes from file image.
+Step 4: this [notebook](https://github.com/jacr2006/drowsiness-detection/blob/master/Notebooks/data_inference.ipynb) tests regression model. Input to model comes from image file.
 
 Step 5: this Python [script](https://github.com/jacr2006/drowsiness-detection/blob/master/Test/python_test_tflite_model.py) tests the model on PC with Python. Input to model comes from PC webcam.
 ![alt test](Screenshot_Landmark.png)<br/><br/>
